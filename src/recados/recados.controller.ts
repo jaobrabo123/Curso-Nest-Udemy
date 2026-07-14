@@ -1,36 +1,45 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
+} from "@nestjs/common";
 import { RecadosService } from "./recados.service";
-import { Recado } from "./entities/recado.entity";
+import { CreateRecadoDTO } from "./dto/create-recado.dto";
+import { UpdateRecadoDTO } from "./dto/update-recado.dto";
+import { PaginationDTO } from "../common/dto/pagination.dto";
 
 @Controller("recados")
 export class RecadosController {
     constructor(private readonly recadosService: RecadosService) {}
 
     @Get()
-    findAll(@Query() pagination: unknown) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unused-vars
-        const { limit = 10, offset = 0 } = pagination as any;
-        // return `Essa rota retorna todos os recados. Limit=${limit}, Offset=${offset}`;
-        return this.recadosService.findAll();
+    findAll(@Query() pagination: PaginationDTO) {
+        return this.recadosService.findAll(pagination);
     }
 
     @Get(":id")
-    findOne(@Param("id") id: string) {
+    findOne(@Param("id", ParseIntPipe) id: number) {
         return this.recadosService.findOne(id);
     }
 
     @Post()
-    create(@Body() body: Omit<Recado, "id">) {
+    create(@Body() body: CreateRecadoDTO) {
         return this.recadosService.create(body);
     }
 
     @Patch(":id")
-    update(@Param("id") id: string, @Body() body: Partial<Omit<Recado, "id">>) {
+    update(@Param("id", ParseIntPipe) id: number, @Body() body: UpdateRecadoDTO) {
         return this.recadosService.update(id, body);
     }
 
     @Delete(":id")
-    remove(@Param("id") id: string) {
+    remove(@Param("id", ParseIntPipe) id: number) {
         return this.recadosService.remove(id);
     }
 }
