@@ -2,9 +2,10 @@
 
 # RECADOS
 ###
-GET {{baseUrl}}/recados?limit=10&offset=90
+GET {{baseUrl}}/recados
+Authorization: Bearer 123456
 ###
-GET {{baseUrl}}/recados/3
+GET {{baseUrl}}/recados/98
 ###
 POST {{baseUrl}}/recados
 Content-Type: application/json

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 import { PessoasService } from "./pessoas.service";
 import { CreatePessoaDTO } from "./dto/create-pessoa.dto";
 import { UpdatePessoaDTO } from "./dto/update-pessoa.dto";
+import { ParseIntIdPipe } from "../common/pipes/parse-int-id.pipe";
 
 @Controller("pessoas")
 export class PessoasController {
@@ -18,17 +19,17 @@ export class PessoasController {
     }
 
     @Get(":id")
-    findOne(@Param("id", ParseIntPipe) id: number) {
+    findOne(@Param("id", ParseIntIdPipe) id: number) {
         return this.pessoasService.findOne(id);
     }
 
     @Patch(":id")
-    update(@Param("id", ParseIntPipe) id: number, @Body() updatePessoaDto: UpdatePessoaDTO) {
+    update(@Param("id", ParseIntIdPipe) id: number, @Body() updatePessoaDto: UpdatePessoaDTO) {
         return this.pessoasService.update(id, updatePessoaDto);
     }
 
     @Delete(":id")
-    remove(@Param("id", ParseIntPipe) id: number) {
+    remove(@Param("id", ParseIntIdPipe) id: number) {
         return this.pessoasService.remove(id);
     }
 }
