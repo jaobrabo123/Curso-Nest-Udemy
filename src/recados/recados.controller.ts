@@ -7,6 +7,7 @@ import {
     Patch,
     Post,
     Query,
+    // UseGuards,
     UseInterceptors,
 } from "@nestjs/common";
 import { RecadosService } from "./recados.service";
@@ -15,9 +16,11 @@ import { UpdateRecadoDTO } from "./dto/update-recado.dto";
 import { PaginationDTO } from "../common/dto/pagination.dto";
 import { ParseIntIdPipe } from "../common/pipes/parse-int-id.pipe";
 import { AddHeaderInterceptor } from "../common/interceptors/add-header.interceptor";
+// import { IsAdminGuard } from "../common/guards/is-admin.guard";
 
 @Controller("recados")
 @UseInterceptors(AddHeaderInterceptor)
+// @UseGuards(IsAdminGuard)
 export class RecadosController {
     constructor(private readonly recadosService: RecadosService) {}
 
