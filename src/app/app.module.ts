@@ -4,9 +4,6 @@ import { AppService } from "./app.service";
 import { RecadosModule } from "../recados/recados.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { PessoasModule } from "../pessoas/pessoas.module";
-import { SimpleMiddleware } from "../common/middlewares/simple.middleware";
-import { APP_FILTER } from "@nestjs/core";
-import { MyExceptionFilter } from "../common/filters/my-exception.filter";
 
 @Module({
     imports: [
@@ -26,17 +23,17 @@ import { MyExceptionFilter } from "../common/filters/my-exception.filter";
     controllers: [AppController],
     providers: [
         AppService,
-        {
-            provide: APP_FILTER,
-            useClass: MyExceptionFilter,
-        },
+        // {
+        //     provide: APP_FILTER,
+        //     useClass: MyExceptionFilter,
+        // },
     ],
 })
 export class AppModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer.apply(SimpleMiddleware).forRoutes({
-            path: "*",
-            method: RequestMethod.ALL,
-        });
+    configure(_consumer: MiddlewareConsumer) {
+        // consumer.apply(SimpleMiddleware).forRoutes({
+        //     path: "*",
+        //     method: RequestMethod.ALL,
+        // });
     }
 }
