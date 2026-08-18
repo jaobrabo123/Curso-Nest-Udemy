@@ -4,36 +4,40 @@ import { RecadosService } from "./recados.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Recado } from "./entities/recado.entity";
 import { PessoasModule } from "../pessoas/pessoas.module";
-import { RecadoUtils, RecadoUtilsMock } from "./recados.utils";
-import {
-    ONLY_LOWER_CASE_LETTERS_REGEX,
-    REMOVE_SPACES_REGEX,
-    SERVER_NAME,
-} from "./recados.constant";
-import { RemoveSpacesRegex } from "../common/regex/remove-spaces.regex";
-import { OnlyLowerCaseLettersRegex } from "../common/regex/only-lower-case-letters.regex";
+import { RecadoUtils } from "./recados.utils";
+// import { MyDinamicModule } from "../my-dinamic/my-dinamic.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Recado]), forwardRef(() => PessoasModule)],
+    imports: [
+        TypeOrmModule.forFeature([Recado]),
+        forwardRef(() => PessoasModule),
+        // MyDinamicModule.register({
+        //     apiKey: "atsdtad",
+        //     apiUrl: "ajhgsdjhgajh",
+        // }),
+    ],
     controllers: [RecadosController],
     providers: [
         RecadosService,
-        {
-            provide: RecadoUtils,
-            useValue: new RecadoUtilsMock(),
-        },
-        {
-            provide: SERVER_NAME,
-            useValue: "My name is NestJS",
-        },
-        {
-            provide: ONLY_LOWER_CASE_LETTERS_REGEX,
-            useClass: OnlyLowerCaseLettersRegex,
-        },
-        {
-            provide: REMOVE_SPACES_REGEX,
-            useClass: RemoveSpacesRegex,
-        },
+        RecadoUtils,
+        // RegexFactory,
+        // {
+        //     provide: REMOVE_SPACES_REGEX,
+        //     useFactory: (regexFactory: RegexFactory) => {
+        //         return regexFactory.create("RemoveSpacesRegex");
+        //     },
+        //     inject: [RegexFactory],
+        // },
+        // {
+        //     provide: ONLY_LOWER_CASE_LETTERS_REGEX,
+        //     useFactory: (regexFactory: RegexFactory) => {
+        //         // console.log("Esperando a promise");
+        //         // await new Promise(res => setTimeout(res, 3000));
+        //         // console.log("Promise resolvida");
+        //         return regexFactory.create("OnlyLowerCaseLettersRegex");
+        //     },
+        //     inject: [RegexFactory],
+        // },
     ],
     exports: [RecadoUtils],
 })
