@@ -35,4 +35,7 @@ export class Pessoa {
 
     @UpdateDateColumn()
     updatedAt?: Date;
+
+    @Column({ default: true })
+    active!: boolean;
 }

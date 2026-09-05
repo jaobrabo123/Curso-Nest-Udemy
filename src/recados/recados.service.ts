@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Scope } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException, Scope } from "@nestjs/common";
 import { Recado } from "./entities/recado.entity";
 import { CreateRecadoDTO } from "./dto/create-recado.dto";
 import { UpdateRecadoDTO } from "./dto/update-recado.dto";
@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { PessoasService } from "../pessoas/pessoas.service";
 import { PaginationDTO } from "../common/dto/pagination.dto";
+import { TokenPayloadDTO } from "../auth/dto/token-payload.dto";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class RecadosService {
@@ -55,10 +56,10 @@ export class RecadosService {
         return recado;
     }
 
-    async create(dto: CreateRecadoDTO) {
-        const { deId, paraId } = dto;
+    async create(dto: CreateRecadoDTO, tokenPayload: TokenPayloadDTO) {
+        const { paraId } = dto;
 
-        const de = await this.pessoasService.findOne(deId);
+        const de = await this.pessoasService.findOne(tokenPayload.sub);
         const para = await this.pessoasService.findOne(paraId);
 
         const novoRecado = {
@@ -75,15 +76,21 @@ export class RecadosService {
             ...recado,
             de: {
                 id: recado.de.id,
+                nome: recado.de.nome,
             },
             para: {
                 id: recado.para.id,
+                nome: recado.para.nome,
             },
         };
     }
 
-    async update(id: number, dto: UpdateRecadoDTO) {
+    async update(id: number, dto: UpdateRecadoDTO, tokenPayload: TokenPayloadDTO) {
         const recado = await this.findOne(id);
+
+        if (recado.de.id !== tokenPayload.sub) {
+            throw new ForbiddenException("Esse recado não é seu");
+        }
 
         recado.texto = dto.texto ?? recado.texto;
         recado.lido = dto.lido ?? recado.lido;
@@ -91,9 +98,14 @@ export class RecadosService {
         return this.recadoRepository.save(recado);
     }
 
-    async remove(id: number) {
-        const recado = await this.recadoRepository.findOneBy({ id });
+    async remove(id: number, tokenPayload: TokenPayloadDTO) {
+        const recado = await this.findOne(id);
         if (!recado) throw new NotFoundException("Recado não encontrado.");
+
+        if (recado.de.id !== tokenPayload.sub) {
+            throw new ForbiddenException("Esse recado não é seu");
+        }
+
         return this.recadoRepository.remove(recado);
     }
 }

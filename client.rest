@@ -1,22 +1,25 @@
 @baseUrl = http://localhost:3000
+@authToken = {{authenticate.response.body.accessToken}}
+@refreshToken = {{authenticate.response.body.refreshToken}}
 
 # RECADOS
 ###
 GET {{baseUrl}}/recados?limit=20
-Authorization: Bearer 123456
+Authorization: Bearer {{authToken}}
 ###
-GET {{baseUrl}}/recados/98
+GET {{baseUrl}}/recados/15
 ###
 POST {{baseUrl}}/recados
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
     "texto": "Recado",
-    "deId": 7,
     "paraId": 8
 }
 ###
-PATCH  {{baseUrl}}/recados/1
+PATCH  {{baseUrl}}/recados/15
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
@@ -24,33 +27,36 @@ Content-Type: application/json
     "lido": true
 }
 ###
-DELETE {{baseUrl}}/recados/2
+DELETE {{baseUrl}}/recados/14
+Authorization: Bearer {{authToken}}
 
 
 # Pessoas
 ###
 GET {{baseUrl}}/pessoas
+Authorization: Bearer {{authToken}}
 ###
 GET {{baseUrl}}/pessoas/1
 ###
 POST {{baseUrl}}/pessoas
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-    "email": "joao@email.com",
+    "email": "guis@email.com",
     "password": "123456",
-    "nome": "João"
+    "nome": "Guis"
 }
 ###
-DELETE {{baseUrl}}/pessoas/4
+DELETE {{baseUrl}}/pessoas/11
+Authorization: Bearer {{authToken}}
 ###
-PATCH {{baseUrl}}/pessoas/6
+PATCH {{baseUrl}}/pessoas/11
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
-    "email": "email1@email.com",
-    "password": "654321",
-    "nome": "Luiz2"
+    "password": "123456"
 }
 
 ### AppControllerGetHello
@@ -73,3 +79,24 @@ GET {{baseUrl}}/conceitos-manual
 # @name ConceitosAutomaticoControllerHome
 GET {{baseUrl}}/conceitos-automatico
 
+
+# Auth
+### Login
+# @name authenticate
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "joao2@email.com",
+    "password": "123456"
+}
+
+
+### Re-Autenticação
+# @name reAuthenticate
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "{{refreshToken}}"
+}

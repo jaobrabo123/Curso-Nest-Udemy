@@ -6,6 +6,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { PessoasModule } from "../pessoas/pessoas.module";
 import { ConfigModule, ConfigType } from "@nestjs/config";
 import appConfig from "./app.config";
+import { AuthModule } from "../auth/auth.module";
 
 @Module({
     imports: [
@@ -41,6 +42,7 @@ import appConfig from "./app.config";
         }),
         RecadosModule,
         PessoasModule,
+        AuthModule,
     ],
     controllers: [AppController],
     providers: [
