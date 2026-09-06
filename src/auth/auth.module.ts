@@ -18,6 +18,6 @@ import { JwtModule } from "@nestjs/jwt";
     ],
     controllers: [AuthController],
     providers: [{ provide: HashingService, useClass: BcryptService }, AuthService],
-    exports: [HashingService, JwtModule, ConfigModule],
+    exports: [HashingService, JwtModule, ConfigModule, TypeOrmModule],
 })
 export class AuthModule {}

@@ -43,9 +43,10 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-    "email": "guis@email.com",
+    "email": "guis2@email.com",
     "password": "123456",
-    "nome": "Guis"
+    "nome": "Guis",
+    "routePolicies": ["findAllRecados", "createPessoa", "createRecado"]
 }
 ###
 DELETE {{baseUrl}}/pessoas/11
@@ -87,7 +88,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "joao2@email.com",
+    "email": "guis2@email.com",
     "password": "123456"
 }
 
