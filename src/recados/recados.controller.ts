@@ -20,9 +20,6 @@ import { AddHeaderInterceptor } from "../common/interceptors/add-header.intercep
 import { AuthTokenGuard } from "../auth/guards/auth-token.guard";
 import { TokenPayloadParam } from "../auth/params/token-payload.param";
 import { TokenPayloadDTO } from "../auth/dto/token-payload.dto";
-import { RoutePolicyGuard } from "../auth/guards/route-policy.guard";
-import { SetRoutePolicy } from "../auth/decorators/set-route-policy.decorator";
-import { RoutePolicies } from "../auth/enums/route-policies.enum";
 // import { IsAdminGuard } from "../common/guards/is-admin.guard";
 
 @Controller("recados")
@@ -41,8 +38,7 @@ export class RecadosController {
         return this.recadosService.findOne(id);
     }
 
-    @UseGuards(AuthTokenGuard, RoutePolicyGuard)
-    @SetRoutePolicy(RoutePolicies.createRecado)
+    @UseGuards(AuthTokenGuard)
     @Post()
     create(@Body() body: CreateRecadoDTO, @TokenPayloadParam() tokenPayload: TokenPayloadDTO) {
         return this.recadosService.create(body, tokenPayload);

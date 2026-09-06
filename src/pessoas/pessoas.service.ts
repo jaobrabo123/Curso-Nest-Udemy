@@ -27,7 +27,6 @@ export class PessoasService {
                 nome: dto.nome,
                 passwordHash,
                 email: dto.email,
-                routePolicies: dto.routePolicies,
             };
 
             const novaPessoa = this.pessoaRepository.create(dadosPessoa);

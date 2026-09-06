@@ -8,7 +8,6 @@ import {
     UpdateDateColumn,
 } from "typeorm";
 import { Recado } from "../../recados/entities/recado.entity";
-import { RoutePolicies } from "../../auth/enums/route-policies.enum";
 
 @Entity()
 export class Pessoa {
@@ -39,7 +38,4 @@ export class Pessoa {
 
     @Column({ default: true })
     active!: boolean;
-
-    @Column({ type: "simple-array", default: [] })
-    routePolicies!: RoutePolicies[];
 }
