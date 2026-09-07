@@ -38,4 +38,7 @@ export class Pessoa {
 
     @Column({ default: true })
     active!: boolean;
+
+    @Column({ default: "" })
+    picture!: string;
 }

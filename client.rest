@@ -36,7 +36,8 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/pessoas
 Authorization: Bearer {{authToken}}
 ###
-GET {{baseUrl}}/pessoas/1
+GET {{baseUrl}}/pessoas/16
+Authorization: Bearer {{authToken}}
 ###
 POST {{baseUrl}}/pessoas
 Authorization: Bearer {{authToken}}
@@ -45,8 +46,7 @@ Content-Type: application/json
 {
     "email": "guis2@email.com",
     "password": "123456",
-    "nome": "Guis",
-    "routePolicies": ["findAllRecados", "createPessoa", "createRecado"]
+    "nome": "Guis"
 }
 ###
 DELETE {{baseUrl}}/pessoas/11
@@ -101,3 +101,20 @@ Content-Type: application/json
 {
     "refreshToken": "{{refreshToken}}"
 }
+
+
+# Upload
+### Foto da Pessoa
+POST {{baseUrl}}/pessoas/upload-picture
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----BoundaryDelimitadorHttp
+
+------BoundaryDelimitadorHttp
+Content-Disposition: form-data; name="file"; filename="abc.jpg"
+Content-Type: image/jpeg
+
+< ./dev/images/abc.jpg
+------BoundaryDelimitadorHttp--
+
+### Ver Foto
+GET {{baseUrl}}/pictures/16.jpg

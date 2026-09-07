@@ -7,6 +7,8 @@ import { PessoasModule } from "../pessoas/pessoas.module";
 import { ConfigModule, ConfigType } from "@nestjs/config";
 import appConfig from "./app.config";
 import { AuthModule } from "../auth/auth.module";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { resolve } from "path";
 
 @Module({
     imports: [
@@ -39,6 +41,10 @@ import { AuthModule } from "../auth/auth.module";
                     synchronize: appConfigurations.database.synchronize,
                 };
             },
+        }),
+        ServeStaticModule.forRoot({
+            rootPath: resolve(__dirname, "..", "..", "pictures"),
+            serveRoot: "/pictures",
         }),
         RecadosModule,
         PessoasModule,
