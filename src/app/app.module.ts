@@ -9,9 +9,12 @@ import appConfig from "./app.config";
 import { AuthModule } from "../auth/auth.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { resolve } from "path";
+import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
+import { APP_GUARD } from "@nestjs/core";
 
 @Module({
     imports: [
+        ThrottlerModule.forRoot([{ ttl: 60000, limit: 10, blockDuration: 5000 }]),
         ConfigModule.forRoot({
             // load: [appConfig],
             // isGlobal: true,
@@ -52,6 +55,10 @@ import { resolve } from "path";
     ],
     controllers: [AppController],
     providers: [
+        {
+            provide: APP_GUARD,
+            useClass: ThrottlerGuard,
+        },
         AppService,
         // {
         //     provide: APP_FILTER,
