@@ -7,6 +7,7 @@ import { Repository } from "typeorm";
 import { PessoasService } from "../pessoas/pessoas.service";
 import { PaginationDTO } from "../common/dto/pagination.dto";
 import { TokenPayloadDTO } from "../auth/dto/token-payload.dto";
+import { ReponseRecadoDto } from "./dto/reponse-recado.dto";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class RecadosService {
@@ -15,7 +16,7 @@ export class RecadosService {
         private readonly pessoasService: PessoasService,
     ) {}
 
-    async findAll(pagination: PaginationDTO) {
+    async findAll(pagination: PaginationDTO): Promise<ReponseRecadoDto[]> {
         const { limit = 10, offset = 0 } = pagination;
 
         const recados = await this.recadoRepository.find({
@@ -37,7 +38,7 @@ export class RecadosService {
         return recados;
     }
 
-    async findOne(id: number) {
+    async findOne(id: number): Promise<ReponseRecadoDto> {
         const recado = await this.recadoRepository.findOne({
             where: { id },
             relations: { de: true, para: true },
@@ -56,7 +57,7 @@ export class RecadosService {
         return recado;
     }
 
-    async create(dto: CreateRecadoDTO, tokenPayload: TokenPayloadDTO) {
+    async create(dto: CreateRecadoDTO, tokenPayload: TokenPayloadDTO): Promise<ReponseRecadoDto> {
         const { paraId } = dto;
 
         const de = await this.pessoasService.findOne(tokenPayload.sub);
@@ -85,7 +86,11 @@ export class RecadosService {
         };
     }
 
-    async update(id: number, dto: UpdateRecadoDTO, tokenPayload: TokenPayloadDTO) {
+    async update(
+        id: number,
+        dto: UpdateRecadoDTO,
+        tokenPayload: TokenPayloadDTO,
+    ): Promise<ReponseRecadoDto> {
         const recado = await this.findOne(id);
 
         if (recado.de.id !== tokenPayload.sub) {
@@ -98,7 +103,7 @@ export class RecadosService {
         return this.recadoRepository.save(recado);
     }
 
-    async remove(id: number, tokenPayload: TokenPayloadDTO) {
+    async remove(id: number, tokenPayload: TokenPayloadDTO): Promise<ReponseRecadoDto> {
         const recado = await this.findOne(id);
         if (!recado) throw new NotFoundException("Recado não encontrado.");
 
@@ -106,6 +111,8 @@ export class RecadosService {
             throw new ForbiddenException("Esse recado não é seu");
         }
 
-        return this.recadoRepository.remove(recado);
+        await this.recadoRepository.delete(recado.id);
+
+        return recado;
     }
 }

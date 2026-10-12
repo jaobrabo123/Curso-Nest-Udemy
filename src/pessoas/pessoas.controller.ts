@@ -20,6 +20,7 @@ import { AuthTokenGuard } from "../auth/guards/auth-token.guard";
 import { TokenPayloadParam } from "../auth/params/token-payload.param";
 import { TokenPayloadDTO } from "../auth/dto/token-payload.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiBody, ApiConsumes } from "@nestjs/swagger";
 
 @Controller("pessoas")
 export class PessoasController {
@@ -61,6 +62,18 @@ export class PessoasController {
         return this.pessoasService.remove(id, tokenPayload);
     }
 
+    @ApiConsumes("multipart/form-data")
+    @ApiBody({
+        schema: {
+            type: "object",
+            properties: {
+                file: {
+                    type: "string",
+                    format: "binary",
+                },
+            },
+        },
+    })
     @UseGuards(AuthTokenGuard)
     @UseInterceptors(FileInterceptor("file"))
     @Post("upload-picture")

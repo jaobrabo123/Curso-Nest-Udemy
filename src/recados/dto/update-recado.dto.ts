@@ -1,4 +1,4 @@
-import { PartialType } from "@nestjs/mapped-types";
+import { PartialType } from "@nestjs/swagger";
 import { CreateRecadoDTO } from "./create-recado.dto";
 import { IsBoolean, IsOptional } from "class-validator";
 
